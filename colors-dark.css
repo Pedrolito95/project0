@@ -1,0 +1,12 @@
+:root{
+    --background : #111;
+    --main : #ddd;
+    --tab_bg : #262424;
+    --tab_bg_inactive: #1b1b1b;
+    --tab_border : #000000;
+    --label_bg : #262424;
+    --label_border : #000;
+    --selector_bg: rgba(255, 174, 68, 0.2);
+    --selector_border: #fe831e;
+    --secondary-color-hue: 40deg;
+}

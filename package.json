@@ -1,0 +1,14 @@
+{
+  "name": "tutoriel-electron",
+  "version": "1.0.0",
+  "description": "Une application pour explorer les possibilités d'Electron",
+  "main": "main.js",
+  "scripts": {
+    "test": "electron ."
+  },
+  "author": "Pedrolito",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "jquery": "^3.2.1"
+  }
+}
