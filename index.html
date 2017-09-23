@@ -5,32 +5,37 @@
     <link rel="stylesheet" type="text/css" href="style.css">
     <title>Isomap</title>
 </head>
-<body onload="init()">
-
+<body>
+<div id="workspace">
     <div id="dragIndic"></div>
-
-    <div class="section" id="workspace">
-        <div class="section" id="up-down">
-            <div class="section" id="left-right">
-                <div class="section">
-                    <div class="sectionContent" ondragover="event.preventDefault()"></div>
-                    <div class='dragTab'><div class='label' draggable='true'>A<div class='close'></div></div><div class='tabContent'>Contenu de A</div></div>
-                    <div class='dragTab'><div class='label' draggable='true'>A'<div class='close'></div></div><div class='tabContent'><img src="assets/img/mountain.jpg" alt="Mountain View"></div></div>
-                    <div class='dragTab'><div class='label' draggable='true'>A''<div class='close'></div></div><div class='tabContent'>Contenu de A''</div></div>
-                </div>
-                <div class="resizeVertical"></div>
-                <div class="section">
-                    <div class="sectionContent" ondragover="event.preventDefault()"></div>
+    <div class="section" id="left-right">
+        <div class="section" id="up-down" style="flex-grow:1">
+            <div class='section'>
+                <div class="pane">
+                    <div class="paneContent" ondragover="event.preventDefault()"></div>
                     <div class='dragTab'><div class='label' draggable='true'>B<div class='close'></div></div><div class='tabContent'>Contenu de B</div></div>
                 </div>
             </div>
             <div class="resizeHorizontal"></div>
-            <div class="section">
-                <div class="sectionContent" ondragover="event.preventDefault()"></div>
-                <div class='dragTab'><div class='label' draggable='true'>C<div class='close'></div></div><div class='tabContent'>Contenu de C</div></div>
+            <div class='section'>
+                <div class="pane">
+                    <div class="paneContent" ondragover="event.preventDefault()"></div>
+                    <div class='dragTab'><div class='label' draggable='true'>C<div class='close'></div></div><div class='tabContent'>Contenu de C</div></div>
+                    <div class='dragTab'><div class='label' draggable='true'>caca<div class='close'></div></div><div class='tabContent'>Contenu de C</div></div>
+                    <div class='dragTab'><div class='label' draggable='true'>pipi<div class='close'></div></div><div class='tabContent'>Contenu de C</div></div>
+                    <div class='dragTab'><div class='label' draggable='true'>prout<div class='close'></div></div><div class='tabContent'>Contenu de C</div></div>
+                </div>
+            </div>
+        </div>
+        <div class="resizeVertical"></div>
+        <div class="section" style="flex-grow:1">
+            <div class="pane">
+                <div class="paneContent" ondragover="event.preventDefault()"></div>
+                <div class='dragTab'><div class='label' draggable='true'>D<div class='close'></div></div><div class='tabContent'>Contenu de D</div></div>
             </div>
         </div>
     </div>
+</div>
     <script type="text/javascript" src="index.js" ></script>
 </body>
 

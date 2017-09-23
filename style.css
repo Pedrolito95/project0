@@ -1,4 +1,4 @@
-@import url('colors-dark.css');
+@import url('colors-light.css');
 html{
     height:100%;
 }
@@ -10,11 +10,13 @@ body{
     min-width:100%;
     overflow: hidden;
     color: var(--main);
+    background-color: var(--background);
     display:flex;
     flex-direction: column;
 }
 #workspace{
     position: relative;
+    display:flex;
     background-color: var(--background);
     flex:1;
     flex-grow: 1;
@@ -26,6 +28,7 @@ body{
     flex-grow: 1;
     user-select: none;
     background-color: var(--background);
+    /*box-sizing: border-box;*/
 }
 .section#up-down{
     flex-direction: column;
@@ -63,11 +66,26 @@ body{
     bottom:0;
     content:"";
 }
+.pane{
+    position: relative;
+    width:100%;
+    height:100%
+}
+.paneContent{
+    position: absolute;
+    top: 30px;
+    width: 100%;
+    height: calc(100% - 30px);
+    background-color: var(--tab_bg);
+    border: 1px solid var(--tab_border);
+    border-right: 1px solid var(--tab_bg);
+    box-sizing: border-box;
+}
 .dragTab{
     position: absolute;
     width: 256px;
     height: 30px;
-    min-width: 128px;
+    min-width: 64px;
     max-width: 256px;
 }
 .dragTab .label{
@@ -77,6 +95,11 @@ body{
     background-color: var(--label_bg);
     border: 1px solid var(--label_border);
     border-bottom-color: var(--label_bg);
+    border-top: 0px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    box-sizing: border-box;
 
     font-size: 12px;
     line-height: 2.5em;
@@ -101,24 +124,16 @@ body{
 .dragTab .tabContent{
     display: none;
 }
-.sectionContent{
-    position: absolute;
-    top: 30px;
-    width: 100%;
-    height: calc(100% - 32px);
-    background-color: var(--tab_bg);
-    border: 1px solid var(--tab_border);
-    /*overflow:auto;*/
-}
 #dragIndic{
     position: fixed;
-    z-index: 10;
+    z-index: 5;
     pointer-events: none;
     visibility: hidden;
     background-color:  var(--selector_bg);
     border: 1px solid var(--selector_border);
-    width: calc(100% - 4px);
-    height: calc(100% - 4px);
+    width: 100%;
+    height: 100%;
+    /*box-sizing: border-box;*/
 }
 
 @keyframes fadein{

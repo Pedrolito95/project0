@@ -3,9 +3,10 @@
     --main : #000;
     --tab_bg : #e8eaed;
     --tab_bg_inactive: #cdd0d7;
-    --tab_border : #c7cad1;
+    --tab_border : #acacb1;
     --label_bg : #e8eaed;
     --label_border : #acacb1;
-    --selector_bg: rgba(71, 178, 215, 0.2);
+    --selector_border: #47b2d7;
+    --selector_bg: rgba(71, 178, 215, 0.3);
     --secondary-color-hue: 200deg;
 }
