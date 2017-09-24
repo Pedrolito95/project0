@@ -19,6 +19,16 @@ function correctSyntax(){
             $(sections[i].children[0]).unwrap();
         }
     }
+    sections = $('.section');
+    for(var i=0;i<sections.length;i++){
+        if(sections[i].id == 'left-right' || sections[i].id == 'up-down'){
+            for(var j=0; j<sections[i].children.length;j++){
+                if(sections[i].id == sections[i].children[j].id){
+                    $(sections[i].children[j]).children().unwrap();
+                }
+            }
+        }
+    }
 }
 //------------ LABELS ------------//
 $(document).on("mouseenter",".label", function(event){
@@ -44,10 +54,10 @@ function deleteTab(tab){
     var superSection = section.parentElement;
     var n = Array.prototype.indexOf.call(superSection.children, section);
     if(pane.children.length <= 2){//Sections modif
-        $(superSection).children('.resizeVertical, .resizeHorizontal').remove();
-        $(superSection).removeAttr('id');
+        if($(section).prev().attr('class')== 'resizeVertical' || $(section).prev().attr('class')== 'resizeHorizontal'){
+            $(section).prev().remove();
+        }
         $(section).remove();
-        $(superSection.children[2-n]).css('flex-grow',1);
         correctSyntax();
     }else{//Tabs modifs
         var i = Array.prototype.indexOf.call(pane.children, tab);
@@ -200,8 +210,6 @@ function controlTabSizes(){
         var pane = panes[i];
         for(var j=1; j<pane.children.length; j++){
             var newWidth = $(pane).width()/(pane.children.length-1);
-            console.log(pane);
-            console.log($(pane).width());
             $(pane.children[j]).width(newWidth);
             if(j > 1 && $(pane.children[j-1]).offset().left+$(pane.children[j-1]).width() > 0){
                 $(pane.children[j]).offset({left:$(pane.children[j-1]).offset().left+$(pane.children[j-1]).width()-1});
@@ -215,16 +223,15 @@ $(document).on("mousedown", '.resizeHorizontal, .resizeVertical',function(event)
 });
 function resizing(event){
     var section = grabResizer.parentElement;
-    var prev = section.children[0];
-    var next = section.children[2];
-    $(section).css('border','2px solid var(--selector_border)');
-    //$(section).css('box-sizing','border-box');
+    var prev = $(grabResizer).prev();
+    var next = $(grabResizer).next();
+    var nbSect = $(grabResizer.parentElement).children('.section').length;
     var upDown = (grabResizer.className=="resizeHorizontal");
-    var mousePos = upDown ? event.pageY-$(section).offset().top : event.pageX-$(section).offset().left;
-    var size = upDown ? size=$(section).height()/2 : size=$(section).width()/2;
-    if(size !=0){
-        $(prev).css('flex-grow',mousePos/size);
-        $(next).css('flex-grow',2-(mousePos/size));
+    var mousePos = upDown ? event.pageY-$(prev).offset().top : event.pageX-$(prev).offset().left;
+    var size = upDown ? size=$(prev).height()+$(next).height() : size=$(prev).width()+$(next).width();
+    if(size > 0 && mousePos*2/size < 2 && mousePos*2/size > 0){
+        $(prev).css('flex-grow',mousePos*2/size);
+        $(next).css('flex-grow',2-(mousePos*2/size));
     }
     controlTabSizes();
 }
@@ -243,7 +250,6 @@ $(window).on("mousemove", function(event){
     if(grabResizer != null){resizing(event);}
 });
 $(window).on("mouseup", function(event){
-    if(!!grabResizer){$(grabResizer.parentElement).css('border','');}
     grabResizer = null;
 });
 //Shortcuts

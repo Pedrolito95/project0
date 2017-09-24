@@ -1,4 +1,4 @@
-@import url('colors-light.css');
+@import url('colors-dark.css');
 html{
     height:100%;
 }
@@ -28,7 +28,6 @@ body{
     flex-grow: 1;
     user-select: none;
     background-color: var(--background);
-    /*box-sizing: border-box;*/
 }
 .section#up-down{
     flex-direction: column;
@@ -133,7 +132,6 @@ body{
     border: 1px solid var(--selector_border);
     width: 100%;
     height: 100%;
-    /*box-sizing: border-box;*/
 }
 
 @keyframes fadein{
