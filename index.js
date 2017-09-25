@@ -15,7 +15,7 @@ function init(){
 function correctSyntax(){
     sections = $('flexipane-section');
     for(var i=0;i<sections.length;i++){
-        if(sections[i].children.length<=1 && sections[i].children[0].className=='section'){
+        if(sections[i].children.length<=1 && $(sections[i].children[0]).prop('tagName')=='FLEXIPANE-SECTION'){
             $(sections[i].children[0]).unwrap();
         }
     }
@@ -54,7 +54,7 @@ function deleteTab(tab){
     var superSection = section.parentElement;
     var n = Array.prototype.indexOf.call(superSection.children, section);
     if(pane.children.length <= 2){//Sections modif
-        if($(section).prev().prop('tagName') == 'flexipane-resize'){
+        if($(section).prev().prop('tagName') == 'FLEXIPANE-RESIZE'){
             $(section).prev().remove();
         }
         $(section).remove();
@@ -75,7 +75,6 @@ $(document).on("dragover", '.label',function(event){
     lastSideTarget = null;
 });
 $(document).on("dragover", 'flexipane-paneContent',function(event){
-    console.log('OOOOOKKKK4');
     event.preventDefault();
     mouseTarget = event.target;
     sectionTarget = mouseTarget.parentElement.parentElement;
@@ -121,23 +120,23 @@ $(document).on("drop", 'flexipane-paneContent',function(event){
         initialSect = draggedTab.parentElement.parentElement;
         $(targetSection.children[0]).append(draggedTab);
         if(initialSect.children[0].children.length <=1){
-            if($(initialSect).next().prop('tagName') == 'flexipane-resize'){
+            if($(initialSect).next().prop('tagName') == 'FLEXIPANE-RESIZE'){
                 $(initialSect).next().remove();
-            }else if($(initialSect).prev().prop('tagName') == 'flexipane-resize'){
+            }else if($(initialSect).prev().prop('tagName') == 'FLEXIPANE-RESIZE'){
                 $(initialSect).prev().remove();
             }
             $(initialSect).remove();
         }
     }else{
         if(draggedTabPane.children.length > 2){
-            $(draggedTab).wrap('<flexipane-section><div class="pane"></div></flexipane-section>');
+            $(draggedTab).wrap('<flexipane-section><flexipane-pane></flexipane-pane></flexipane-section>');
             $(draggedTab.parentElement).prepend('<flexipane-paneContent ondragover="event.preventDefault()"></flexipane-paneContent>');
             $(draggedTab.parentElement.children[0]).html($(draggedTab.children[1]).html());
             sectionToAdd = draggedTab.parentElement.parentElement;
         }else{
-            if($(sectionToAdd).next().prop('tagName') == 'flexipane-resize'){
+            if($(sectionToAdd).next().prop('tagName') == 'FLEXIPANE-RESIZE'){
                 $(sectionToAdd).next().remove();
-            }else if($(sectionToAdd).prev().prop('tagName') == 'flexipane-resize'){
+            }else if($(sectionToAdd).prev().prop('tagName') == 'FLEXIPANE-RESIZE'){
                 $(sectionToAdd).prev().remove();
             }
         }
@@ -173,7 +172,7 @@ function allowDrop(ev) {
 }
 //------------ TABS ------------//
 function arrangeTabs(){
-    sections = document.getElementsByClassName('section');
+    sections = document.getElementsByTagName('FLEXIPANE-SECTION');
     for(var i=0;i<sections.length;i++){
         if(sections[i].children.length==1){
             showTab(sections[i].children[0].children[1]);
@@ -231,7 +230,6 @@ function resizing(event){
     var mousePos = upDown ? event.pageY-$(prev).offset().top : event.pageX-$(prev).offset().left;
     var size = upDown ? size=$(prev).height()+$(next).height() : size=$(prev).width()+$(next).width();
     var flex = parseFloat($(prev).css('flex-grow'))+parseFloat($(next).css('flex-grow'));
-    console.log(flex);
     if(mousePos*flex/size > flex){mousePos = size;}
     else if(mousePos*flex/size < 0){mousePos = 0;}
     if(size > 0){
@@ -245,9 +243,7 @@ $(window).resize(function(){
     arrangeTabs();
 });
 $(window).on("dragover",function(event){
-    console.log($(event.target).prop('tagName'));
     if($(event.target).prop('tagName')=="FLEXIPANE-PANECONTENT"){
-        console.log($(event.target).prop('PUTAAAAAAIN'));
         $("flexipane-dragIndic").css("visibility", "visible");
     }else{
         $("flexipane-dragIndic").css("visibility", "hidden");
