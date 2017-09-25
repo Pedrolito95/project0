@@ -14,14 +14,14 @@ body{
     display:flex;
     flex-direction: column;
 }
-#workspace{
+flexipane{
     position: relative;
     display:flex;
     background-color: var(--background);
     flex:1;
     flex-grow: 1;
 }
-.section{
+flexipane-section{
     position: relative;
     display:flex;
     flex:1;
@@ -29,48 +29,48 @@ body{
     user-select: none;
     background-color: var(--background);
 }
-.section#up-down{
+flexipane-section.column{
     flex-direction: column;
 }
-.section#left-right{
+flexipane-section.row{
     flex-direction: row;
 }
-.resizeHorizontal{
+flexipane-resize{
     position: relative;
-    cursor: row-resize;
     z-index:3;
+}
+flexipane-resize::before{
+    position: absolute;
+    content:"";
+}
+flexipane-resize.horizontal{
+    cursor: row-resize;
     width:100%;
     height:0px;
 }
-.resizeHorizontal::before{
-    position: absolute;
+flexipane-resize.horizontal::before{
     height:8px;
     top:-4px;
     left:0;
     right:0;
-    content:"";
 }
-.resizeVertical{
-    position: relative;
+flexipane-resize.vertical{
     cursor: col-resize;
-    z-index:3;
     width:0;
     height:100%;
 }
-.resizeVertical::before{
-    position: absolute;
+flexipane-resize.vertical::before{
     width:8px;
     left:-4px;
     top:0;
     bottom:0;
-    content:"";
 }
-.pane{
+flexipane-pane{
     position: relative;
     width:100%;
     height:100%
 }
-.paneContent{
+flexipane-paneContent{
     position: absolute;
     top: 30px;
     width: 100%;
@@ -80,14 +80,14 @@ body{
     border-right: 1px solid var(--tab_bg);
     box-sizing: border-box;
 }
-.dragTab{
+flexipane-dragTab{
     position: absolute;
     width: 256px;
     height: 30px;
     min-width: 64px;
     max-width: 256px;
 }
-.dragTab .label{
+flexipane-dragTab .label{
     position: absolute;
     width:100%;
     heigth:100%;
@@ -105,7 +105,7 @@ body{
     text-align: center;
     user-select: none;
 }
-.dragTab .label .close{
+flexipane-dragTab .label .close{
     position: absolute;
     opacity: 0;
     right:6px;
@@ -115,15 +115,15 @@ body{
     background-image: url('assets/img/close.png');
     background-size: 100% 100%;
 }
-.dragTab .label .close:hover{
+flexipane-dragTab .label .close:hover{
     background-image: url('assets/img/closeHover.png');
     cursor: pointer;
     filter: hue-rotate(var(--secondary-color-hue));/*40deg;*/
 }
-.dragTab .tabContent{
+flexipane-dragTab .tabContent{
     display: none;
 }
-#dragIndic{
+flexipane-dragIndic{
     position: fixed;
     z-index: 5;
     pointer-events: none;

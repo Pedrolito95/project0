@@ -13,17 +13,17 @@ function init(){
 }
 //------------ SECTIONS ------------//
 function correctSyntax(){
-    sections = $('.section');
+    sections = $('flexipane-section');
     for(var i=0;i<sections.length;i++){
         if(sections[i].children.length<=1 && sections[i].children[0].className=='section'){
             $(sections[i].children[0]).unwrap();
         }
     }
-    sections = $('.section');
+    sections = $('flexipane-section');
     for(var i=0;i<sections.length;i++){
-        if(sections[i].id == 'left-right' || sections[i].id == 'up-down'){
+        if(sections[i].className == 'row' || sections[i].className == 'column'){
             for(var j=0; j<sections[i].children.length;j++){
-                if(sections[i].id == sections[i].children[j].id){
+                if(sections[i].className == sections[i].children[j].className){
                     $(sections[i].children[j]).children().unwrap();
                 }
             }
@@ -54,7 +54,7 @@ function deleteTab(tab){
     var superSection = section.parentElement;
     var n = Array.prototype.indexOf.call(superSection.children, section);
     if(pane.children.length <= 2){//Sections modif
-        if($(section).prev().attr('class')== 'resizeVertical' || $(section).prev().attr('class')== 'resizeHorizontal'){
+        if($(section).prev().prop('tagName') == 'flexipane-resize'){
             $(section).prev().remove();
         }
         $(section).remove();
@@ -74,7 +74,9 @@ $(document).on("dragover", '.label',function(event){
     lastSectionTarget = null;
     lastSideTarget = null;
 });
-$(document).on("dragover", '.paneContent',function(event){
+$(document).on("dragover", 'flexipane-paneContent',function(event){
+    console.log('OOOOOKKKK4');
+    event.preventDefault();
     mouseTarget = event.target;
     sectionTarget = mouseTarget.parentElement.parentElement;
     mX = event.clientX;mY = event.clientY;
@@ -101,13 +103,13 @@ $(document).on("dragover", '.paneContent',function(event){
         dX=sX;dY=sY;dW=sW;dH=sH;sideTarget='center';
     }
     if(sectionTarget != lastSectionTarget || sideTarget != lastSideTarget){
-        $("#dragIndic").offset({left:dX,top:dY});
-        $("#dragIndic").width(dW);$("#dragIndic").height(dH);
+        $("flexipane-dragIndic").offset({left:dX,top:dY});
+        $("flexipane-dragIndic").width(dW);$("flexipane-dragIndic").height(dH);
     }
     lastSectionTarget = sectionTarget;
     lastSideTarget = sideTarget;
 });
-$(document).on("drop", '.paneContent',function(event){
+$(document).on("drop", 'flexipane-paneContent',function(event){
     var targetSection = event.target.parentElement.parentElement;
     var setFirst = (sideTarget=="left" || sideTarget=="up");
     var leftRight = (sideTarget=="left" || sideTarget=="right");
@@ -119,44 +121,44 @@ $(document).on("drop", '.paneContent',function(event){
         initialSect = draggedTab.parentElement.parentElement;
         $(targetSection.children[0]).append(draggedTab);
         if(initialSect.children[0].children.length <=1){
-            if($(initialSect).next().attr('class')=='resizeVertical' || $(initialSect).next().attr('class')=='resizeHorizontal'){
+            if($(initialSect).next().prop('tagName') == 'flexipane-resize'){
                 $(initialSect).next().remove();
-            }else if($(initialSect).prev().attr('class')=='resizeVertical' || $(initialSect).prev().attr('class')=='resizeHorizontal'){
+            }else if($(initialSect).prev().prop('tagName') == 'flexipane-resize'){
                 $(initialSect).prev().remove();
             }
             $(initialSect).remove();
         }
     }else{
         if(draggedTabPane.children.length > 2){
-            $(draggedTab).wrap('<div class="section"><div class="pane"></div></div>');
-            $(draggedTab.parentElement).prepend('<div class="paneContent" ondragover="event.preventDefault()"></div>');
+            $(draggedTab).wrap('<flexipane-section><div class="pane"></div></flexipane-section>');
+            $(draggedTab.parentElement).prepend('<flexipane-paneContent ondragover="event.preventDefault()"></flexipane-paneContent>');
             $(draggedTab.parentElement.children[0]).html($(draggedTab.children[1]).html());
             sectionToAdd = draggedTab.parentElement.parentElement;
         }else{
-            if($(sectionToAdd).next().attr('class')=='resizeVertical' || $(sectionToAdd).next().attr('class')=='resizeHorizontal'){
+            if($(sectionToAdd).next().prop('tagName') == 'flexipane-resize'){
                 $(sectionToAdd).next().remove();
-            }else if($(sectionToAdd).prev().attr('class')=='resizeVertical' || $(sectionToAdd).prev().attr('class')=='resizeHorizontal'){
+            }else if($(sectionToAdd).prev().prop('tagName') == 'flexipane-resize'){
                 $(sectionToAdd).prev().remove();
             }
         }
         if(setFirst){
             $(sectionToAdd).insertBefore(targetSection);
             if (leftRight){
-                $(sectionToAdd).after("<div class='resizeVertical'></div>");
-                $(sectionToAdd).add($(sectionToAdd).next()).add($(sectionToAdd).next().next()).wrapAll('<div class="section" id="left-right">');
+                $(sectionToAdd).after("<flexipane-resize class='vertical'></div>");
+                $(sectionToAdd).add($(sectionToAdd).next()).add($(sectionToAdd).next().next()).wrapAll('<flexipane-section class="row"></flexipane-section>');
             }
             else{
-                $(sectionToAdd).after("<div class='resizeHorizontal'></div>");
-                $(sectionToAdd).add($(sectionToAdd).next()).add($(sectionToAdd).next().next()).wrapAll('<div class="section" id="up-down"></div>');
+                $(sectionToAdd).after("<flexipane-resize class='horizontal'></div>");
+                $(sectionToAdd).add($(sectionToAdd).next()).add($(sectionToAdd).next().next()).wrapAll('<flexipane-section class="column"></flexipane-section>');
             }
         }else{
             $(sectionToAdd).insertAfter(targetSection);
             if (leftRight){
-                $(sectionToAdd).before("<div class='resizeVertical'></div>");
-                $(sectionToAdd).add($(sectionToAdd).prev()).add($(sectionToAdd).prev().prev()).wrapAll('<div class="section" id="left-right"></div>');
+                $(sectionToAdd).before("<flexipane-resize class='vertical'></div>");
+                $(sectionToAdd).add($(sectionToAdd).prev()).add($(sectionToAdd).prev().prev()).wrapAll('<flexipane-section class="row"></flexipane-section>');
             }else{
-                $(sectionToAdd).before("<div class='resizeHorizontal'></div>");
-                $(sectionToAdd).add($(sectionToAdd).prev()).add($(sectionToAdd).prev().prev()).wrapAll('<div class="section" id="up-down">');
+                $(sectionToAdd).before("<flexipane-resize class='horizontal'></div>");
+                $(sectionToAdd).add($(sectionToAdd).prev()).add($(sectionToAdd).prev().prev()).wrapAll('<flexipane-section class="column"></felxipane-section>');
             }
         }
     }
@@ -164,7 +166,7 @@ $(document).on("drop", '.paneContent',function(event){
     arrangeTabs();
 });
 $(document).on("dragend", '.label',function(event){
-    $("#dragIndic").css("visibility", "hidden");
+    $("flexipane-dragIndic").css("visibility", "hidden");
 });
 function allowDrop(ev) {
     ev.preventDefault();
@@ -199,13 +201,12 @@ function showTab(tab){
         }else{//on cache
             dragTab.children[0].style.height = "30px";
             dragTab.children[0].style.backgroundColor = $("body").css("--tab_bg_inactive");
-            //$(dragTab.children[0]).css("border-left","1px solid var(--tab_bg_inactive)");
             dragTab.children[0].style.borderBottom = "0px";
         }
     }
 }
 function controlTabSizes(){
-    panes = $('.pane');
+    panes = $('flexipane-pane');
     for(var i=0;i<panes.length;i++){
         var pane = panes[i];
         for(var j=1; j<pane.children.length; j++){
@@ -218,20 +219,24 @@ function controlTabSizes(){
     }
 }
 //------------ RESIZERS ------------//
-$(document).on("mousedown", '.resizeHorizontal, .resizeVertical',function(event){
+$(document).on("mousedown", 'flexipane-resize',function(event){
     grabResizer = event.target;
 });
 function resizing(event){
     var section = grabResizer.parentElement;
     var prev = $(grabResizer).prev();
     var next = $(grabResizer).next();
-    var nbSect = $(grabResizer.parentElement).children('.section').length;
-    var upDown = (grabResizer.className=="resizeHorizontal");
+    var nbSect = $(grabResizer.parentElement).children('flexipane-section').length;
+    var upDown = (grabResizer.className=="horizontal");
     var mousePos = upDown ? event.pageY-$(prev).offset().top : event.pageX-$(prev).offset().left;
     var size = upDown ? size=$(prev).height()+$(next).height() : size=$(prev).width()+$(next).width();
-    if(size > 0 && mousePos*2/size < 2 && mousePos*2/size > 0){
-        $(prev).css('flex-grow',mousePos*2/size);
-        $(next).css('flex-grow',2-(mousePos*2/size));
+    var flex = parseFloat($(prev).css('flex-grow'))+parseFloat($(next).css('flex-grow'));
+    console.log(flex);
+    if(mousePos*flex/size > flex){mousePos = size;}
+    else if(mousePos*flex/size < 0){mousePos = 0;}
+    if(size > 0){
+        $(prev).css('flex-grow',mousePos*flex/size);
+        $(next).css('flex-grow',flex-(mousePos*flex/size));
     }
     controlTabSizes();
 }
@@ -240,10 +245,12 @@ $(window).resize(function(){
     arrangeTabs();
 });
 $(window).on("dragover",function(event){
-    if($(event.target).attr("class")=="paneContent"){
-        $("#dragIndic").css("visibility", "visible");
+    console.log($(event.target).prop('tagName'));
+    if($(event.target).prop('tagName')=="FLEXIPANE-PANECONTENT"){
+        console.log($(event.target).prop('PUTAAAAAAIN'));
+        $("flexipane-dragIndic").css("visibility", "visible");
     }else{
-        $("#dragIndic").css("visibility", "hidden");
+        $("flexipane-dragIndic").css("visibility", "hidden");
     }
 });
 $(window).on("mousemove", function(event){
@@ -255,9 +262,9 @@ $(window).on("mouseup", function(event){
 //Shortcuts
 $.getScript("jquery.hotkeys.js", function(){
     $(document).bind('keydown', 'ctrl+A', function(){
-        for(var i=0; i<$('.section').length;i++){
-            if($('.section')[i].children.length==1 && $('.section')[i].children[0].children.length-1 < 42){
-                $($('.section')[i].children[0]).append("<div class='dragTab'><div class='label' draggable='true'>Sans titre<div class='close'></div></div><div class='tabContent'>Onglet vide</div></div>");
+        for(var i=0; i<$('flexipane-section').length;i++){
+            if($('flexipane-section')[i].children.length==1 && $('flexipane-section')[i].children[0].children.length-1 < 42){
+                $($('flexipane-section')[i].children[0]).append("<flexipane-dragTab><div class='label' draggable='true'>Sans titre<div class='close'></div></div><div class='tabContent'>Onglet vide</div></div>");
                 arrangeTabs();
                 controlTabSizes();
                 return;
