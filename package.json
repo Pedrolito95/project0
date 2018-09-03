@@ -4,7 +4,7 @@
   "description": "Une application pour explorer les possibilités d'Electron",
   "main": "main.js",
   "scripts": {
-    "test": "electron ."
+    "start": "electron ."
   },
   "author": "Pedrolito",
   "license": "GPL-3.0",
